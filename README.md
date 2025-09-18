@@ -32,8 +32,8 @@ End the program and close the output video window by pressing 'q'.
 
 ## PROGRAM:
 ``` Python
-### Developed By: HIRUTHIK SUDHAKAR
-### Register No: 212223240054
+### Developed By: SANJAY V
+### Register No: 212223230188
 
 from IPython.display import display, Javascript
 from google.colab.output import eval_js
