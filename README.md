@@ -1,105 +1,127 @@
-# Image-Acquisition-from-Web-Camera
-## AIM:
+# Image_Acqusition-_using_Web_Camera
 
+## Developed By:Sanjay V
+## Register No:212223230188
+## Aim
+ 
+Aim:
+ 
 To write a python program using OpenCV to capture the image from the web camera and do the following image manipulations.
 i) Write the frame as JPG 
 ii) Display the video 
 iii) Display the video by resizing the window
 iv) Rotate and display the video
 
-## SOFTWARE USED:
+## Software Used
 Anaconda - Python 3.7
-## ALGORITHM:
+## Algorithm
 ### Step 1:
-Use cv2.VideoCapture(0) to access web camera
-<br>
+Import OpenCV Package.
 
 ### Step 2:
-Use cv2.imread to read the video or image
-<br>
+Capture Video from Webcam. Use VideoCapture(0) to access the webcam and start capturing video.
 
 ### Step 3:
-Use cv2.imwrite to save the image
-<br>
+Read Video or Image. Utilize 'imread' to read a video frame or image from the webcam.
 
 ### Step 4:
-Use cv2.imshow to show the video
-<br>
+Save Image to File. Employ 'imwrite' to save the captured image to a file.
 
 ### Step 5:
-End the program and close the output video window by pressing 'q'.
-<br>
+Display Video or Image. Use 'imshow' to display the captured video frame or image, and end Program with 'q'. Allow the program to be terminated by pressing the 'q' key.
 
-## PROGRAM:
+## Program:
 ``` Python
-### Developed By: SANJAY V
-### Register No: 212223230188
-
-from IPython.display import display, Javascript
-from google.colab.output import eval_js
-from base64 import b64decode
-import cv2
-import numpy as np
-from google.colab.patches import cv2_imshow
-
-def capture_frame():
-    js = Javascript('''
-    async function takePhoto() {
-      const div = document.createElement('div');
-      const video = document.createElement('video');
-      div.appendChild(video);
-      document.body.appendChild(div);
-      const stream = await navigator.mediaDevices.getUserMedia({video: true});
-      video.srcObject = stream;
-      await video.play();
-      const canvas = document.createElement('canvas');
-      canvas.width = video.videoWidth;
-      canvas.height = video.videoHeight;
-      canvas.getContext('2d').drawImage(video, 0, 0);
-      stream.getTracks().forEach(track => track.stop());
-      div.remove();
-      return canvas.toDataURL('image/jpeg', 1.0);
-    }
-    ''')
-    display(js)
-    data = eval_js('takePhoto()')
-    binary = b64decode(data.split(',')[1])
-    nparr = np.frombuffer(binary, np.uint8)
-    frame = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
-    return frame
+### Developed By:Sanjay V
+### Register No:212223230188
 
 ## i) Write the frame as JPG file
-frame = capture_frame()
-cv2.imwrite("captured_image.jpg", frame)
-print("Image saved as captured_image.jpg")
-cv2_imshow(frame)
+import cv2
+videoCaptureObject = cv2.VideoCapture(0)
+while (True):
+    ret,frame = videoCaptureObject.read()
+    cv2.imwrite("img.jpeg",frame)
+    result = False
+videoCaptureObject.release()
+cv2.destroyAllWindows()
+
+
+         OR
+
+import cv2
+
+videoCaptureObject = cv2.VideoCapture(0)
+max_frames = 4  # Maximum number of frames to capture
+frame_count = 0
+
+while frame_count < max_frames:
+    ret, frame = videoCaptureObject.read()
+    cv2.imwrite(f"img_{frame_count}.jpeg", frame)
+    frame_count += 1
+
+videoCaptureObject.release()
+cv2.destroyAllWindows()
 
 
 
 
 ## ii) Display the video
-frame = capture_frame()
-cv2_imshow(frame)
-
+import cv2
+videoCaptureObject = cv2.VideoCapture(0)
+while(True):
+    ret,frame = videoCaptureObject.read()
+    cv2.imshow('myimage',frame)
+    if cv2.waitKey(1) == ord('q'):
+        break
+videoCaptureObject.release()
+cv2.destroyAllWindows()
 
 
 
 
 ## iii) Display the video by resizing the window
-frame = capture_frame()
-height, width, _ = frame.shape
-smaller_frame = cv2.resize(frame, (0,0), fx=0.5, fy=0.5)
-image = np.zeros_like(frame)
-image[:height//2, :width//2] = smaller_frame
-cv2_imshow(image)
+import cv2
+import numpy as np
+cap = cv2.VideoCapture(0)
+while True:
+    ret, frame = cap.read() 
+    width = int(cap.get(3))
+    height = int(cap.get(4))
+    image = np.zeros(frame.shape, np.uint8) 
+    smaller_frame = cv2.resize(frame, (0,0), fx = 0.5, fy=0.5) 
+    image[:height//2, :width//2] = smaller_frame
+    image[height//2:, :width//2] = smaller_frame
+    image[:height//2, width//2:] = smaller_frame 
+    image [height//2:, width//2:] = smaller_frame
+    cv2.imshow('myimage', image)
+    if cv2.waitKey(1) == ord('q'):
+        break
+cap.release()
+cv2.destroyAllWindows()
 
 
 
 
 ## iv) Rotate and display the video
-frame = capture_frame()
-rotated = cv2.rotate(frame, cv2.ROTATE_90_CLOCKWISE)
-cv2_imshow(rotated)
+import cv2
+import numpy as np
+cap = cv2.VideoCapture(0)
+while True:
+    ret, frame = cap.read() 
+    width = int(cap.get(3))
+    height = int(cap.get(4))
+    image = np.zeros(frame.shape, np.uint8) 
+    smaller_frame = cv2.resize(frame, (0,0), fx = 0.5, fy=0.5) 
+    image[:height//2, :width//2] = cv2.rotate(smaller_frame,cv2.ROTATE_180)
+    image[height//2:, :width//2] = cv2.rotate(smaller_frame,cv2.ROTATE_180)
+    image[:height//2, width//2:] = smaller_frame 
+    image [height//2:, width//2:] = smaller_frame
+    cv2.imshow('myimage', image)
+    if cv2.waitKey(1) == ord('q'):
+        break
+cap.release()
+cv2.destroyAllWindows()
+
 
 
 
@@ -109,43 +131,29 @@ cv2_imshow(rotated)
 
 
 ```
-## OUTPUT:
+## Output
 
 ### i) Write the frame as JPG image
-![(https://github.com/mohan8900/Image_Acqusition-_using_Web_Camera/blob/main/306834696-5c319921-b55e-4ec5-a6f2-f2294b0a8e72.png)](https://github.com/mohan8900/Image_Acqusition-_using_Web_Camera/blob/main/306834696-5c319921-b55e-4ec5-a6f2-f2294b0a8e72.png)
+![image](https://github.com/Ragu-123/Image_Acqusition-_using_Web_Camera/assets/113915622/44cf5382-6880-46fd-b49e-19cefdceb7b5)
 
-
-
-</br>
-</br>
 
 
 ### ii) Display the video
-![Screenshot 2024-02-21 213311](https://github.com/Jaiganesh235/Image_Acqusition-_using_Web_Camera/assets/118657189/d29f2b17-edf9-4bbe-906e-b6e5a9424d12)
-
-
-</br>
-</br>
+![WhatsApp Image 2024-02-22 at 13 51 13_c94dd397](https://github.com/Ragu-123/Image_Acqusition-_using_Web_Camera/assets/113915622/36aff539-4413-4a35-b0e0-f8e53b59046d)
 
 
 ### iii) Display the video by resizing the window
-![Screenshot 2024-02-21 213416](https://github.com/Jaiganesh235/Image_Acqusition-_using_Web_Camera/assets/118657189/49686dd1-a328-4909-a5f1-ddf0567ecff6)
+![WhatsApp Image 2024-02-22 at 13 53 33_9d275659](https://github.com/Ragu-123/Image_Acqusition-_using_Web_Camera/assets/113915622/41da4d20-5aa7-445e-96aa-04ba087ea1aa)
 
-
-
-</br>
-</br>
 
 
 
 ### iv) Rotate and display the video
-![Screenshot 2024-02-21 213518](https://github.com/Jaiganesh235/Image_Acqusition-_using_Web_Camera/assets/118657189/2fe12628-6724-41d5-9e06-15bbfa8eacb2)
+![WhatsApp Image 2024-02-22 at 13 56 32_8697fb4d](https://github.com/Ragu-123/Image_Acqusition-_using_Web_Camera/assets/113915622/706c3b05-9a2e-4f3a-aac1-a32ad9936cfb)
 
 
 
-</br>
-</br>
 
 
-## RESULT: 
+## Result:
 Thus the image is accessed from webcamera and displayed using openCV.
