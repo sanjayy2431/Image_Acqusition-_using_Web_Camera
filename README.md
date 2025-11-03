@@ -34,8 +34,8 @@ End the program and close the output video window by pressing 'q'.
 
 ## PROGRAM:
 ``` Python
-# Name:P.Senthil Arunachalam
-# Reg No:212224240147
+# Name:SANJAY V
+# Reg No:212223230188
 
 from IPython.display import display, Javascript
 from google.colab.output import eval_js
